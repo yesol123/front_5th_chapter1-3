@@ -6,7 +6,6 @@ import React, {
   memo,
   useCallback,
 } from "react";
-import { useDebounce } from "use-debounce";
 import { generateItems, renderLog } from "./utils";
 
 type Theme = "light" | "dark";
@@ -148,15 +147,14 @@ export const Header: React.FC = memo(() => {
 export const ItemList: React.FC<ItemListProps> = memo(
   ({ theme, items, onAddItemsClick, filter, setFilter }) => {
     renderLog("ItemList rendered");
-    const [debouncedFilter] = useDebounce(filter, 300);
 
     const filteredItems = useMemo(() => {
       return items.filter(
         (item) =>
-          item.name.toLowerCase().includes(debouncedFilter.toLowerCase()) ||
-          item.category.toLowerCase().includes(debouncedFilter.toLowerCase()),
+          item.name.toLowerCase().includes(filter.toLowerCase()) ||
+          item.category.toLowerCase().includes(filter.toLowerCase()),
       );
-    }, [items, debouncedFilter]);
+    }, [items, filter]);
 
     const totalPrice = filteredItems.reduce((sum, item) => sum + item.price, 0);
 
